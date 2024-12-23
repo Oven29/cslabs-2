@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.23)
 
-set(project "lab_1")
+set(project "planets")
 project(${project})
 
 set(CMAKE_CXX_STANDARD 17)
@@ -20,7 +20,7 @@ add_executable(${project}
     ${${project}_SOURCE_LIST}
 )
 
-target_link_libraries(${project} mymath printer)
+# target_link_libraries(${project} mymath printer)
 
 set_target_properties(${project} PROPERTIES
     RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/bin
