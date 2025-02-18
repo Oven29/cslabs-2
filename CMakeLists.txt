@@ -21,6 +21,10 @@ add_executable(${project}
 
 target_link_libraries(${project} planet)
 
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/source.txt
+    ${CMAKE_CURRENT_BINARY_DIR} COPYONLY
+)
+
 set_target_properties(${project} PROPERTIES
     RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/bin
 )

@@ -10,7 +10,7 @@ set(${project}_SOURCES
 )
 
 set(${project}_HEADERS
-    planet.h
+    planet.hpp
 )
 
 set(${project}_SOURCE_LIST
