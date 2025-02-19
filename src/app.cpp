@@ -9,6 +9,7 @@ namespace {
 
 const int BUFFER_SIZE = 256;
 const int defaultSize = 0;
+const char* housesSourceFilename = "houses.txt";
 
 bool isValidInteractiveType(int type) {
     return type > 0 && type < 8;
@@ -88,12 +89,8 @@ void runInteractiveMode() {
                 break;
             }
             case InteractiveType::read: {
-                char* filename = new char[BUFFER_SIZE];
-                std::cout << "Enter filename: ";
-                std::cin >> filename;
-                house::House::readFromFile(filename, housingDepartament, size);
-                std::cout << "Data read from file " << filename << std::endl;
-                delete[] filename;
+                house::House::readFromFile(housesSourceFilename, housingDepartament, size);
+                std::cout << "Data read from file " << housesSourceFilename << std::endl;
                 break;
             }
             case InteractiveType::write: {
