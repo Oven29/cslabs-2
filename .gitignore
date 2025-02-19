@@ -214,3 +214,6 @@ _deps
 # Additional
 build/
 bin/
+
+# other
+output.txt

@@ -24,10 +24,14 @@ int main() {
     std::cout << std::endl << *pluto << " - appending to solar system" << std::endl << std::endl;
     planet::Planet::append(solarSystem, size, pluto);
     planet::Planet::print(solarSystem, size);
-    planet::Planet* removePlanet = solarSystem[std::min(size, 1)];
-    std::cout << std::endl << *removePlanet<< " - removing from solar system" << std::endl << std::endl;
+    planet::Planet* removePlanet = solarSystem[std::min(size, 5)];
+    std::cout << std::endl << *removePlanet << " - removing from solar system" << std::endl << std::endl;
     planet::Planet::remove(solarSystem, size, removePlanet);
     planet::Planet::print(solarSystem, size);
+
+    const char* fileout = "output.txt";
+    std::cout << "Write changes to file " << fileout << std::endl;
+    planet::Planet::writeToFile(fileout, solarSystem, size);
 
     delete[] solarSystem;
 

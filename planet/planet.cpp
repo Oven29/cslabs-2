@@ -81,7 +81,10 @@ void Planet::writeToFile(const char* filename, Planet** planets, int& size) {
     std::ofstream file(filename);
 
     for (int i = 0; i < size; i++) {
-        file << *planets[i] << std::endl;
+        file << planets[i]->name << ' ' << planets[i]->diametr << ' ' << planets[i]->hasLife << ' ' << planets[i]->countOfSatellites;
+        if (i != size - 1) {
+            file << std::endl;
+        }
     }
 }
 
