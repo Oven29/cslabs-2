@@ -10,6 +10,7 @@ set(${project}_SOURCES
 )
 
 add_subdirectory(planet)
+add_subdirectory(house)
 
 set(${project}_SOURCE_LIST
     ${${project}_SOURCES}
@@ -19,9 +20,13 @@ add_executable(${project}
     ${${project}_SOURCE_LIST}
 )
 
-target_link_libraries(${project} planet)
+target_link_libraries(${project} planet house)
 
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/source.txt
+    ${CMAKE_CURRENT_BINARY_DIR} COPYONLY
+)
+
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/houses.txt
     ${CMAKE_CURRENT_BINARY_DIR} COPYONLY
 )
 
