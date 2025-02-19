@@ -7,6 +7,11 @@ set(CMAKE_CXX_STANDARD 17)
 
 set(${project}_SOURCES
     main.cpp
+    src/app.cpp
+)
+
+set(${project}_HEADERS
+    src/app.hpp
 )
 
 add_subdirectory(planet)
@@ -14,6 +19,7 @@ add_subdirectory(house)
 
 set(${project}_SOURCE_LIST
     ${${project}_SOURCES}
+    ${${project}_HEADERS}
 )
 
 add_executable(${project}
