@@ -66,15 +66,25 @@ bool operator<(const Planet& el1, const Planet& el2) {
 
 void Planet::readFromFile(const char* filename, Planet** planets, int& size) {
     std::ifstream file(filename);
-    int i = 0;
+
     Planet* planet = nullptr;
+    Planet** buffer = new Planet*[BUFFER_SIZE];
+
+    for (int i = 0; i < size; i++) {
+        buffer[i] = planets[i];
+    }
 
     while (!file.eof()) {
         file >> planet;
-        planets[i++] = planet;
+        buffer[size++] = planet;
     }
 
-    size = i;
+    delete[] planets;
+    planets = new Planet*[size];
+    for (int i = 0; i < size; i++) {
+        planets[i] = buffer[i];
+    }
+    delete[] buffer;
 }
 
 void Planet::writeToFile(const char* filename, Planet** planets, int& size) {

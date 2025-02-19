@@ -32,16 +32,14 @@ House::~House() {
 
 std::ostream& operator<<(std::ostream& os, const House& house) {
     os << house.id << ". " << house.street << ' ' << house.number;
-    os << "(" << house.countOfFloors << " floors, " << house.countOfApartaments << " apartaments)";
+    os << " (" << house.countOfFloors << " floors, " << house.countOfApartaments << " apartaments)";
 
     return os;
 }
 
 std::istream& operator>>(std::istream& in, House*& house) {
     char* street = new char[BUFFER_SIZE];
-    int number{};
-    int countOfFloors{};
-    int countOfApartaments{};
+    int number{}, countOfFloors{}, countOfApartaments{};
 
     in >> street >> number >> countOfFloors >> countOfApartaments;
     house = new House(street, number, countOfFloors, countOfApartaments);
@@ -61,15 +59,25 @@ bool operator<(const House& el1, const House& el2) {
 
 void House::readFromFile(const char* filename, House** houses, int& size) {
     std::ifstream file(filename);
-    int i = 0;
+
     House* house = nullptr;
+    House** buffer = new House*[BUFFER_SIZE];
+
+    for (int i = 0; i < size; i++) {
+        buffer[i] = houses[i];
+    }
 
     while (!file.eof()) {
         file >> house;
-        houses[i++] = house;
+        buffer[size++] = house;
     }
 
-    size = i;
+    delete[] houses;
+    houses = new House*[size];
+    for (int i = 0; i < size; i++) {
+        houses[i] = buffer[i];
+    }
+    delete[] buffer;
 }
 
 void House::writeToFile(const char* filename, House** houses, int& size) {
