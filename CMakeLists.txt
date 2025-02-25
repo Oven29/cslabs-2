@@ -1,21 +1,20 @@
 cmake_minimum_required(VERSION 3.23)
 
-set(project "lab_2_planets")
+set(project "lab_3_fractions")
 project(${project})
 
 set(CMAKE_CXX_STANDARD 17)
 
 set(${project}_SOURCES
     main.cpp
-    src/app.cpp
+    # src/app.cpp
 )
 
 set(${project}_HEADERS
-    src/app.hpp
+    # src/app.hpp
 )
 
-add_subdirectory(planet)
-add_subdirectory(house)
+# add_subdirectory()
 
 set(${project}_SOURCE_LIST
     ${${project}_SOURCES}
@@ -26,15 +25,7 @@ add_executable(${project}
     ${${project}_SOURCE_LIST}
 )
 
-target_link_libraries(${project} planet house)
-
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/source.txt
-    ${CMAKE_CURRENT_BINARY_DIR} COPYONLY
-)
-
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/houses.txt
-    ${CMAKE_CURRENT_BINARY_DIR} COPYONLY
-)
+# target_link_libraries(${project} )
 
 set_target_properties(${project} PROPERTIES
     RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/bin
