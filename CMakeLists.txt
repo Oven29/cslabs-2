@@ -14,7 +14,7 @@ set(${project}_HEADERS
     # src/app.hpp
 )
 
-# add_subdirectory()
+add_subdirectory(fraction)
 
 set(${project}_SOURCE_LIST
     ${${project}_SOURCES}
@@ -25,7 +25,7 @@ add_executable(${project}
     ${${project}_SOURCE_LIST}
 )
 
-# target_link_libraries(${project} )
+target_link_libraries(${project} fraction)
 
 set_target_properties(${project} PROPERTIES
     RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/bin
