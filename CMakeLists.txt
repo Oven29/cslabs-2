@@ -1,32 +1,33 @@
 cmake_minimum_required(VERSION 3.23)
 
-set(project "lab_3_fractions")
-project(${project})
+project("lab_3_fractions")
 
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 20)
 
-set(${project}_SOURCES
+set(SOURCES
     main.cpp
     src/app.cpp
 )
 
-set(${project}_HEADERS
+set(HEADERS
     src/app.hpp
 )
 
 add_subdirectory(fraction)
 
-set(${project}_SOURCE_LIST
-    ${${project}_SOURCES}
-    ${${project}_HEADERS}
-)
+set(SOURCE_LIST ${SOURCES} ${HEADERS})
 
-add_executable(${project}
-    ${${project}_SOURCE_LIST}
-)
+add_executable(${CMAKE_PROJECT_NAME} ${SOURCE_LIST})
 
-target_link_libraries(${project} fraction)
+target_compile_options(${CMAKE_PROJECT_NAME} PRIVATE -Wall -Wextra -Werror -Wpedantic)
 
-set_target_properties(${project} PROPERTIES
+# Enable debug symbols if flag is set ENABLE_DEBUG (`cd build && cmake -ENABLE_DEBUG=True ..`)
+if(ENABLE_DEBUG)
+    target_compile_options(${CMAKE_PROJECT_NAME} PRIVATE -g)
+endif()
+
+target_link_libraries(${CMAKE_PROJECT_NAME} fraction)
+
+set_target_properties(${CMAKE_PROJECT_NAME} PROPERTIES
     RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/bin
 )
