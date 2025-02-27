@@ -15,9 +15,10 @@ class Fraction {
     void parseString(const char* str);
 
  public:
+    Fraction();
     Fraction(int whole, int numerator, int denominator);
     Fraction(const char* str);
-    Fraction(int numerator = 0, int denominator = 1);
+    Fraction(int numerator, int denominator);
     Fraction(double num);
 
     Fraction operator+(const Fraction& other) const;

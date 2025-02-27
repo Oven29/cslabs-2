@@ -90,11 +90,18 @@ void Fraction::parseString(const char* str) {
         }
     }
 
+    if (state == ParseState::numerator) {
+        throw std::invalid_argument("Invalid input string");
+    }
+
     if (negative && whole != 0) {
         whole = -1 * whole;
     } else if (negative) {
         numerator = -1 * numerator;
     }
+}
+
+Fraction::Fraction() : whole(0), numerator(0), denominator(1) {
 }
 
 Fraction::Fraction(int whole, int numerator, int denominator) : whole(whole), numerator(numerator), denominator(denominator) {
@@ -108,13 +115,12 @@ Fraction::Fraction(const char* str) {
     simplify();
 }
 
-Fraction::Fraction(int numerator = 0, int denominator = 1) : whole(0), numerator(numerator), denominator(denominator) {
+Fraction::Fraction(int numerator, int denominator) : whole(0), numerator(numerator), denominator(denominator) {
     checkCorrectly();
     simplify();
 }
 
-Fraction::Fraction(double num) {
-    whole = 0;
+Fraction::Fraction(double num) : whole(0) {
     int factor = std::pow(10, N_DEC);
     numerator = static_cast<int>(num * factor);
     denominator = factor;
@@ -155,7 +161,12 @@ std::ostream& operator<<(std::ostream& os, const Fraction& fraction) {
     if (fraction.whole != 0) {
         os << fraction.whole << SPACE;
     }
-    os << fraction.numerator << SLASH << fraction.denominator;
+    if (fraction.numerator != 0) {
+        os << fraction.numerator << SLASH << fraction.denominator;
+    }
+    if (fraction.numerator == 0 && fraction.whole == 0) {
+        os << 0;
+    }
     return os;
 }
 
