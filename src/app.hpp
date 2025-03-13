@@ -1,5 +1,7 @@
 #pragma once
 
+#include "../house/house.hpp"
+
 namespace app {
 
 enum class ProgramMode {
@@ -14,12 +16,20 @@ enum class InteractiveType {
     append = 4,
     remove = 5,
     sort = 6,
-    exit = 7
+    edit = 7,
+    exit = 8
+};
+
+enum class FieldToEdit {
+    number = 1,
+    countOfFloors = 2,
+    countOfApartaments = 3,
 };
 
 ProgramMode getProgramMode(int argc, char** argv);
 void runDemonstrativeMode();
 InteractiveType getInteractiveType();
+void editHouse(house::House*& el);
 void runInteractiveMode();
 void run(int argc, char** argv);
 

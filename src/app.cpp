@@ -4,6 +4,7 @@
 
 #include <cstring>
 #include <iostream>
+#include <limits>
 
 namespace {
 
@@ -12,7 +13,7 @@ const int defaultSize = 0;
 const char* housesSourceFilename = "houses.txt";
 
 bool isValidInteractiveType(int type) {
-    return type > 0 && type < 8;
+    return type >= static_cast<int>(app::InteractiveType::print) && type <= static_cast<int>(app::InteractiveType::exit);
 }
 
 }  // namespace
@@ -60,17 +61,65 @@ void runDemonstrativeMode() {
 }
 
 InteractiveType getInteractiveType() {
-    std::cout << "print - 1; read from file - 2; write to file - 3; append element - 4; remove element - 5; sort - 6; exit - 7" << std::endl;
+    while (true) {
+        std::cout << "===" << std::endl
+                  << "print - 1 " << std::endl
+                  << "read from file - 2" << std::endl
+                  << "write to file - 3" << std::endl
+                  << "append element - 4" << std::endl
+                  << "remove element - 5" << std::endl
+                  << "sort - 6" << std::endl
+                  << "edit - 7" << std::endl
+                  << "exit - 8" << std::endl;
 
-    int type{};
-    std::cin >> type;
+        int type{};
+        std::cin >> type;
 
-    if (!isValidInteractiveType(type)) {
-        std::cout << "Invalid input!" << std::endl;
-        return getInteractiveType();
+        if (std::cin.fail()) {
+            std::cin.clear();
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            std::cout << "Invalid input! Please enter a number between 1 and 8." << std::endl;
+            continue;
+        }
+
+        if (isValidInteractiveType(type)) {
+            return static_cast<InteractiveType>(type);
+        }
+
+        std::cin.clear();
+        std::cout << "Invalid choice! Please enter a number between 1 and 8." << std::endl;
     }
+}
 
-    return static_cast<InteractiveType>(type);
+void editHouse(house::House*& el) {
+    std::cout << "number - 1; countOfFloors - 2; countOfApartaments - 3" << std::endl;
+    int n;
+    std::cin >> n;
+    if (n < 1 || n > 3) {
+        std::cout << "Wrong input" << std::endl;
+    } else {
+        int newValue;
+        std::cout << "Enter new value" << std::endl;
+        std::cin >> newValue;
+        FieldToEdit fieldToEdit = static_cast<FieldToEdit>(n);
+        switch (fieldToEdit) {
+            case FieldToEdit::number: {
+                std::cout << "Number updated" << std::endl;
+                el->setNumber(newValue);
+                break;
+            }
+            case FieldToEdit::countOfFloors: {
+                std::cout << "Count of floors updated" << std::endl;
+                el->setCountOfFloors(newValue);
+                break;
+            }
+            case FieldToEdit::countOfApartaments: {
+                std::cout << "Count of apartaments updated" << std::endl;
+                el->setCountOfApartaments(newValue);
+                break;
+            }
+        }
+    }
 }
 
 void runInteractiveMode() {
@@ -110,7 +159,7 @@ void runInteractiveMode() {
                 house::House* newElement = new house::House(street, number, countOfFloors, countOfApartaments);
                 delete[] street;
                 house::House::append(housingDepartament, size, newElement);
-                std::cout << *newElement << "added to db" << std::endl;
+                std::cout << *newElement << " added to db" << std::endl;
                 break;
             }
             case InteractiveType::remove: {
@@ -120,13 +169,36 @@ void runInteractiveMode() {
                 std::cin >> street >> number >> countOfFloors >> countOfApartaments;
                 house::House* removeElement = new house::House(street, number, countOfFloors, countOfApartaments);
                 delete[] street;
-                house::House::remove(housingDepartament, size, removeElement);
-                std::cout << *removeElement << "removed from db" << std::endl;
+                bool removed = house::House::remove(housingDepartament, size, removeElement);
+                if (removed) {
+                    std::cout << *removeElement << " removed from db" << std::endl;
+                } else {
+                    std::cout << *removeElement << " not found in db" << std::endl;
+                }
                 break;
             }
             case InteractiveType::sort: {
                 house::House::sort(housingDepartament, size);
                 std::cout << "Data was sorted" << std::endl;
+                break;
+            }
+            case InteractiveType::edit: {
+                house::House::print(housingDepartament, size);
+                std::cout << "Enter id element to edit" << std::endl;
+                int id;
+                std::cin >> id;
+                house::House* houseToEdit = nullptr;
+                for (int i = 0; i < size; i++) {
+                    if (housingDepartament[i]->getId() == id) {
+                        houseToEdit = housingDepartament[i];
+                        break;
+                    }
+                }
+                if (houseToEdit == nullptr) {
+                    std::cout << "House with id=" << id << " not found" << std::endl;
+                    break;
+                }
+                editHouse(houseToEdit);
                 break;
             }
             case InteractiveType::exit: {
