@@ -163,17 +163,16 @@ void runInteractiveMode() {
                 break;
             }
             case InteractiveType::remove: {
-                std::cout << "Enter element to remove (street number floors apartaments)" << std::endl;
-                char* street = new char[BUFFER_SIZE];
-                int number{}, countOfFloors{}, countOfApartaments{};
-                std::cin >> street >> number >> countOfFloors >> countOfApartaments;
-                house::House* removeElement = new house::House(street, number, countOfFloors, countOfApartaments);
-                delete[] street;
-                bool removed = house::House::remove(housingDepartament, size, removeElement);
+                house::House::print(housingDepartament, size);
+                std::cout << "Enter element id to remove" << std::endl;
+                int id;
+                std::cin >> id;
+                bool removed = house::House::remove(housingDepartament, size, id);
+                std::cout << "Element with id=" << id;
                 if (removed) {
-                    std::cout << *removeElement << " removed from db" << std::endl;
+                    std::cout << " removed from db" << std::endl;
                 } else {
-                    std::cout << *removeElement << " not found in db" << std::endl;
+                    std::cout << " not found in db" << std::endl;
                 }
                 break;
             }
@@ -203,6 +202,9 @@ void runInteractiveMode() {
             }
             case InteractiveType::exit: {
                 std::cout << "Goodbuy!" << std::endl;
+                for (int i = 0; i < size; i++) {
+                    delete housingDepartament[i];
+                }
                 delete[] housingDepartament;
                 running = false;
                 break;

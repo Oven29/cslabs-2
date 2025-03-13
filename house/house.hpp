@@ -32,14 +32,14 @@ class House {
     friend bool operator<(const House& el1, const House& el2);
     House& operator=(const House& house);
 
-    static void readFromFile(const char* filename, House** houses, int& size);
+    static void readFromFile(const char* filename, House**& houses, int& size);
     static void writeToFile(const char* filename, House** houses, int& size);
 
-    static void print(House**& houses, int& size);
+    static void print(House** houses, int& size);
     static void sort(House**& houses, int& size);
 
     static void append(House**& houses, int& size, House* house);
-    static bool remove(House**& houses, int& size, House* house);
+    static bool remove(House**& houses, int& size, int id);
 };
 
 }  // namespace house

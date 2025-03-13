@@ -33,13 +33,12 @@ House::House(const House& house) : number(house.number), countOfFloors(house.cou
 }
 
 House::~House() {
-    delete[] street;
+    if (street != nullptr) {
+        delete[] street;
+    }
 }
 
 void House::setStreet(char* street) {
-    if (this->street != nullptr) {
-        delete[] this->street;
-    }
     this->street = new char[std::strlen(street) + 1];
     std::strcpy(this->street, street);
 }
@@ -107,31 +106,33 @@ House& House::operator=(const House& house) {
     return *this;
 }
 
-void House::readFromFile(const char* filename, House** houses, int& size) {
+void House::readFromFile(const char* filename, House**& houses, int& size) {
     std::ifstream file(filename);
 
     if (!file) {
         throw std::runtime_error("Can't open file");
     }
 
+    size = 0;
     House* house = nullptr;
-    House** buffer = new House*[BUFFER_SIZE];
 
+    while (!file.eof()) {
+        file >> house;
+        houses[size++] = house;
+    }
+
+}
+
+void House::append(House**& houses, int& size, House* house) {
+    House** buffer = new House*[size + 1];
+    
     for (int i = 0; i < size; i++) {
         buffer[i] = houses[i];
     }
 
-    while (!file.eof()) {
-        file >> house;
-        buffer[size++] = house;
-    }
-
-    delete[] houses;
-    houses = new House*[size];
-    for (int i = 0; i < size; i++) {
-        houses[i] = buffer[i];
-    }
-    delete[] buffer;
+    buffer[size] = house;
+    houses = buffer;  
+    size++;
 }
 
 void House::writeToFile(const char* filename, House** houses, int& size) {
@@ -149,7 +150,7 @@ void House::writeToFile(const char* filename, House** houses, int& size) {
     }
 }
 
-void House::print(House**& houses, int& size) {
+void House::print(House** houses, int& size) {
     std::cout << " id" << std::setw(MAX_STREET_LEN + 1) << "street" << " number floors apartaments" << std::endl;
 
     for (int i = 0; i < size; i++) {
@@ -167,22 +168,9 @@ void House::sort(House**& houses, int& size) {
     }
 }
 
-
-void House::append(House**& houses, int& size, House* house) {
-    if (houses != nullptr) {
-        House** buffer = houses;
-        houses = new House*[size + 1];
-        for (int i = 0; i < size; i++) {
-            houses[i] = buffer[i];
-        }
-        houses[size++] = house;
-        delete[] buffer;
-    }
-}
-
-bool House::remove(House**& houses, int& size, House* house) {
+bool House::remove(House**& houses, int& size, int id) {
     for (int i = 0; i < size; i++) {
-        if (*houses[i] == *house) {
+        if (houses[i]->getId() == id) {
             for (int j = i; j < size - 1; j++) {
                 houses[j] = houses[j + 1];
             }
