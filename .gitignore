@@ -216,4 +216,4 @@ build/
 bin/
 
 # other
-*.txt
+output.txt
