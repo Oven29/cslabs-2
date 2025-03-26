@@ -60,15 +60,15 @@ void Fraction::checkCorrectly() {
 void Fraction::parseString(const char* str) {
     whole = 0;
     numerator = 0;
-    denominator = 1;
+    denominator = 0;
+    positive = true;
 
     int strLen = std::strlen(str);
-    bool negative = false;
     ParseState state = isCharInString(str, SPACE) ? ParseState::whole : ParseState::numerator;
 
     for (int i = 0; i < strLen; i++) {
         if (str[i] == MINUS && i == 0) {
-            negative = true;
+            positive = false;
         } else if (str[i] == SPACE && state == ParseState::whole) {
             state = ParseState::numerator;
         } else if (str[i] == SLASH && state == ParseState::numerator) {
@@ -76,35 +76,31 @@ void Fraction::parseString(const char* str) {
         } else if (isNumber(str[i])) {
             switch (state) {
                 case ParseState::whole:
-                    whole = whole * 10 + toInt(str[i]);
-                    break;
+                whole = whole * 10 + toInt(str[i]);
+                break;
                 case ParseState::numerator:
-                    numerator = numerator * 10 + toInt(str[i]);
-                    break;
+                numerator = numerator * 10 + toInt(str[i]);
+                break;
                 case ParseState::denominator:
-                    denominator = denominator * 10 + toInt(str[i]);
-                    break;
+                denominator = denominator * 10 + toInt(str[i]);
+                break;
             }
         } else {
             throw std::invalid_argument("Invalid input string");
         }
+        // std::cout << "D:" << str[i] << " " << whole << " " << numerator << " " << denominator << std::endl;
     }
 
     if (state == ParseState::numerator) {
         throw std::invalid_argument("Invalid input string");
     }
-
-    if (negative && whole != 0) {
-        whole = -1 * whole;
-    } else if (negative) {
-        numerator = -1 * numerator;
-    }
 }
 
-Fraction::Fraction() : whole(0), numerator(0), denominator(1) {
+Fraction::Fraction() : whole(0), numerator(0), denominator(1), positive(true) {
 }
 
-Fraction::Fraction(int whole, int numerator, int denominator) : whole(whole), numerator(numerator), denominator(denominator) {
+Fraction::Fraction(int whole, int numerator, int denominator)
+    : whole(abs(whole)), numerator(abs(numerator)), denominator(abs(denominator)), positive(whole >= 0) {
     checkCorrectly();
     simplify();
 }
@@ -115,21 +111,23 @@ Fraction::Fraction(const char* str) {
     simplify();
 }
 
-Fraction::Fraction(int numerator, int denominator) : whole(0), numerator(numerator), denominator(denominator) {
+Fraction::Fraction(int numerator, int denominator) : whole(0), numerator(abs(numerator)), denominator(abs(denominator)), positive(numerator >= 0) {
     checkCorrectly();
     simplify();
 }
 
 Fraction::Fraction(double num) : whole(0) {
     int factor = std::pow(10, N_DEC);
-    numerator = static_cast<int>(num * factor);
+    numerator = abs(static_cast<int>(num * factor));
     denominator = factor;
+    positive = num >= 0;
 
     simplify();
 }
 
 Fraction Fraction::operator+(const Fraction& other) const {
-    return Fraction(this->whole + other.whole, this->numerator * other.denominator + other.numerator * this->denominator,
+    return Fraction((this->positive ? 1 : -1) * (this->whole * this->denominator + this->numerator) * other.denominator +
+                        (other.positive ? 1 : -1) * (other.whole * other.denominator + other.numerator) * this->denominator,
                     this->denominator * other.denominator);
 }
 
@@ -158,6 +156,9 @@ void Fraction::operator+=(double number) {
 }
 
 std::ostream& operator<<(std::ostream& os, const Fraction& fraction) {
+    if (!fraction.positive) {
+        os << MINUS;
+    }
     if (fraction.whole != 0) {
         os << fraction.whole << SPACE;
     }

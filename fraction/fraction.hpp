@@ -8,6 +8,7 @@ const int N_DEC = 4;
 
 class Fraction {
  private:
+    bool positive;
     int whole, numerator, denominator;
 
     void simplify();
