@@ -9,6 +9,7 @@ const char SPACE = ' ';
 const char SLASH = '/';
 
 const int BUF_SIZE = 256;
+int MAX_INT = static_cast<int>(std::pow(2, 32)) - 200;
 
 int gcd(int a, int b) {
     while (b != 0) {
@@ -55,7 +56,7 @@ void Fraction::checkCorrectly() {
     if (denominator == 0) {
         throw std::invalid_argument("Denominator can't be zero");
     }
-    if (whole > MAX_INT || denominator > MAX_INT || numerator > MAX_INT) {
+    if (whole >= MAX_INT || denominator >= MAX_INT || numerator >= MAX_INT) {
         throw std::invalid_argument("Fraction is too big");
     }
 }
@@ -79,19 +80,21 @@ void Fraction::parseString(const char* str) {
         } else if (isNumber(str[i])) {
             switch (state) {
                 case ParseState::whole:
-                whole = whole * 10 + toInt(str[i]);
-                break;
+                    whole = whole * 10 + toInt(str[i]);
+                    break;
                 case ParseState::numerator:
-                numerator = numerator * 10 + toInt(str[i]);
-                break;
+                    numerator = numerator * 10 + toInt(str[i]);
+                    break;
                 case ParseState::denominator:
-                denominator = denominator * 10 + toInt(str[i]);
-                break;
+                    denominator = denominator * 10 + toInt(str[i]);
+                    break;
+            }
+            if (whole >= MAX_INT || denominator >= MAX_INT || numerator >= MAX_INT) {
+                throw std::invalid_argument("Fraction is too big");
             }
         } else {
             throw std::invalid_argument("Invalid input string");
         }
-        // std::cout << "D:" << str[i] << " " << whole << " " << numerator << " " << denominator << std::endl;
     }
 
     if (state == ParseState::numerator) {
