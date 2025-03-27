@@ -1,3 +1,4 @@
+#include <cstring>
 #include <iostream>
 #include "stack/stack.h"
 
@@ -14,17 +15,21 @@ void factorizeNumber(int number, stack::Stack<int>*& stack) {
 
 }  // namespace
 
-int main() {
-    stack::Stack<int>* st = new stack::Stack<int>();
+int main(int argc, char** argv) {
+    int number = {};
 
-    std::cout << "Enter number (>1): ";
-    int number;
-    std::cin >> number;
-    if (number <= 1) {
-        std::cout << "Number must be > 1" << std::endl;
-        return 1;
+    if (argc == 2 && std::strcmp(argv[1], "-it") == 0) {
+        std::cout << "Enter number (>1): ";
+        std::cin >> number;
+        if (number <= 1) {
+            std::cout << "Number must be > 1" << std::endl;
+            return 1;
+        }
+    } else {
+        number = 1360;
     }
 
+    stack::Stack<int>* st = new stack::Stack<int>();
     factorizeNumber(number, st);
 
     std::cout << number << '=';
@@ -33,7 +38,7 @@ int main() {
     factorizeNumber(number, st);
 
     stack::Stack<int>* st2 = new stack::Stack<int>(*st);
-    
+
     std::cout << number << '=';
     st2->print();
 
