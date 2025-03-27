@@ -1,5 +1,7 @@
 #pragma once
 
+#include <iostream>
+
 namespace stack {
 
 template<class T, class FRIEND>
@@ -18,15 +20,27 @@ class Stack {
 
  public:
     Stack();          // конструктор
+    Stack(const Stack<T>& stack);
     ~Stack();         // освободить динамическую память
     bool empty();     // стек пустой?
     void push(T el);  // добавить узел в вершину стека
     T pop();          // удалить узел из вершины стека
     T peek();         // считать информацию из вершины стека
+    void print();
 };
 
 template<class T>
 Stack<T>::Stack() : top(nullptr) {
+}
+
+template<class T>
+Stack<T>::Stack(const Stack<T>& stack) {
+    top = nullptr;
+    Node* node = stack.top;
+    while (node != nullptr) {
+        push(node->value);
+        node = node->next;
+    }
 }
 
 template<class T>
@@ -61,6 +75,16 @@ T Stack<T>::pop() {
 template<class T>
 T Stack<T>::peek() {
     return top->value;
+}
+
+template<class T>
+void Stack<T>::print() {
+    while (!empty()) {
+        std::cout << pop();
+        if (!empty()) {
+            std::cout << " * ";
+        }
+    }
 }
 
 }  // namespace stack

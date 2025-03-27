@@ -1,5 +1,5 @@
-#include "stack/stack.h"
 #include <iostream>
+#include "stack/stack.h"
 
 namespace {
 
@@ -12,36 +12,35 @@ void factorizeNumber(int number, stack::Stack<int>*& stack) {
     }
 }
 
-void printStack(stack::Stack<int>*& stack) {
-    while (!stack->empty()) {
-        std::cout << stack->peek();
-        stack->pop();
-        if (!stack->empty()) {
-            std::cout << " * ";
-        }
-    }
-}
-
 }  // namespace
 
 int main() {
     stack::Stack<int>* st = new stack::Stack<int>();
-    int number = 3960;
+
+    std::cout << "Enter number (>1): ";
+    int number;
+    std::cin >> number;
+    if (number <= 1) {
+        std::cout << "Number must be > 1" << std::endl;
+        return 1;
+    }
+
     factorizeNumber(number, st);
 
     std::cout << number << '=';
-    printStack(st);
+    st->print();
     std::cout << std::endl;
 
     factorizeNumber(number, st);
 
-    std::cout << number << '=';
     stack::Stack<int>* st2 = new stack::Stack<int>();
     while (!st->empty()) {
         st2->push(st->peek());
         st->pop();
     }
-    printStack(st2);
+    
+    std::cout << number << '=';
+    st2->print();
     std::cout << std::endl;
 
     delete st;
