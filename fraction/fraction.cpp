@@ -55,6 +55,9 @@ void Fraction::checkCorrectly() {
     if (denominator == 0) {
         throw std::invalid_argument("Denominator can't be zero");
     }
+    if (whole > MAX_INT || denominator > MAX_INT || numerator > MAX_INT) {
+        throw std::invalid_argument("Fraction is too big");
+    }
 }
 
 void Fraction::parseString(const char* str) {

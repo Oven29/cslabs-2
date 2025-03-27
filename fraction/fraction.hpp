@@ -5,6 +5,7 @@
 namespace fraction {
 
 const int N_DEC = 4;
+const int MAX_INT = 1000000;
 
 class Fraction {
  private:
