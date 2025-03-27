@@ -19,9 +19,11 @@ class Stack {
     Node* top;
 
  public:
-    Stack();          // конструктор
+    Stack();  // конструктор
     Stack(const Stack<T>& stack);
-    ~Stack();         // освободить динамическую память
+    ~Stack();  // освободить динамическую память
+    Stack<T>& operator=(const Stack<T>& stack);
+
     bool empty();     // стек пустой?
     void push(T el);  // добавить узел в вершину стека
     T pop();          // удалить узел из вершины стека
@@ -48,6 +50,38 @@ Stack<T>::~Stack() {
     while (!empty()) {
         pop();
     }
+}
+
+template<class T>
+Stack<T>& Stack<T>::operator=(const Stack<T>& stack) {
+    if (this == &stack) {
+        return *this;  // Защита от самоприсваивания
+    }
+
+    // Удаляем старые элементы
+    while (!empty()) {
+        pop();
+    }
+
+    // Копируем элементы из другого стека
+    if (stack.top) {
+        Node* current = stack.top;
+        Node* newTop = new Node();
+        newTop->value = current->value;
+        this->top = newTop;
+
+        Node* newCurrent = newTop;
+        current = current->next;
+
+        while (current) {
+            Node* newNode = new Node();
+            newNode->value = current->value;
+            newCurrent->next = newNode;
+            newCurrent = newNode;
+            current = current->next;
+        }
+    }
+    return *this;
 }
 
 template<class T>
@@ -85,6 +119,7 @@ void Stack<T>::print() {
             std::cout << " * ";
         }
     }
+    std::cout << std::endl;
 }
 
 }  // namespace stack
