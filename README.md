@@ -5,5 +5,5 @@
 **[Cайт](https://iu5edu.ru/wiki/cpp2/)**
 
 
-### Лабораторная работа 3
-**[Классы. Перегрузка конструкторов и операций](https://iu5edu.ru/wiki/cpp2/docs/labs/lab3/)**
+### Лабораторная работа 4
+**[Шаблоны классов](https://iu5edu.ru/wiki/cpp2/docs/labs/lab4/)**
