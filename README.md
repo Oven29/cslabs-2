@@ -5,5 +5,5 @@
 **[Cайт](https://iu5edu.ru/wiki/cpp2/)**
 
 
-### Лабораторная работа 4
-**[Шаблоны классов](https://iu5edu.ru/wiki/cpp2/docs/labs/lab4/)**
+### Лабораторная работа 5
+**[Наследование. Множества](https://iu5edu.ru/wiki/cpp2/docs/labs/lab5/)**

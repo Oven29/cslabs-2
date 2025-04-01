@@ -1,16 +1,16 @@
 cmake_minimum_required(VERSION 3.23)
 
-set(project "stack")
+set(project "set")
 project(${project})
 
 set(CMAKE_CXX_STANDARD 17)
 
 set(${project}_SOURCES
-    stack.cpp
 )
 
 set(${project}_HEADERS
-    stack.h
+    vector.hpp
+    stack.hpp
 )
 
 set(${project}_SOURCE_LIST
