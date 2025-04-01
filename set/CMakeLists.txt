@@ -10,7 +10,7 @@ set(${project}_SOURCES
 
 set(${project}_HEADERS
     vector.hpp
-    stack.hpp
+    set.hpp
 )
 
 set(${project}_SOURCE_LIST
@@ -22,3 +22,5 @@ add_library(${project}
     STATIC
     ${${project}_SOURCE_LIST}
 )
+
+set_target_properties(${project} PROPERTIES LINKER_LANGUAGE CXX)
