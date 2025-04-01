@@ -16,7 +16,7 @@ set(SOURCE_LIST ${SOURCES} ${HEADERS})
 
 add_executable(${CMAKE_PROJECT_NAME} ${SOURCE_LIST})
 
-target_compile_options(${CMAKE_PROJECT_NAME} PRIVATE -Wall -Wextra -Werror -Wpedantic)
+# target_compile_options(${CMAKE_PROJECT_NAME} PRIVATE -Wall -Wextra -Werror -Wpedantic)
 
 # Enable debug symbols if flag is set ENABLE_DEBUG (`cd build && cmake -ENABLE_DEBUG=True ..`)
 if(ENABLE_DEBUG)

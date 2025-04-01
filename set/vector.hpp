@@ -27,15 +27,17 @@ class Vector {
     void push(T value);
     T remove(size_t index);
     bool delete_element(T el);
-    [[nodiscard]] T get(size_t index);
+    [[nodiscard]] T& get(size_t index);
     [[nodiscard]] int find(T value);
     void clean();
 
-    Vector& operator=(const Vector& other) const;
-    T operator[](size_t index);
+    Vector& operator=(Vector& other);
+    T& operator[](size_t index);
 
     template<typename U>
     friend std::ostream& operator<<(std::ostream& os, const Vector<U>& vector);
+    template<typename U>
+    friend std::istream& operator>>(std::istream& is, const Vector<U>& vector);
 };
 
 template<typename T>
@@ -77,7 +79,7 @@ size_t Vector<T>::getSize() {
 }
 
 template<typename T>
-T Vector<T>::get(size_t index) {
+T& Vector<T>::get(size_t index) {
     if (index < 0 || index >= size) {
         throw std::runtime_error("Index out of range!");
     }
@@ -86,7 +88,8 @@ T Vector<T>::get(size_t index) {
         throw std::runtime_error("Vector is empty!");
     }
 
-    return data[index];
+    T& value = data[index];
+    return value;
 }
 
 template<typename T>
@@ -155,7 +158,7 @@ void Vector<T>::clean() {
 }
 
 template<typename T>
-Vector<T>& Vector<T>::operator=(const Vector<T>& other) const {
+Vector<T>& Vector<T>::operator=(Vector<T>& other) {
     if (this != &other) {
         clean();
         size = other.size;
@@ -171,7 +174,7 @@ Vector<T>& Vector<T>::operator=(const Vector<T>& other) const {
 }
 
 template<typename T>
-T Vector<T>::operator[](size_t index) {
+T& Vector<T>::operator[](size_t index) {
     return get(index);
 }
 
