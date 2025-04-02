@@ -1,19 +1,36 @@
 #include "vector.hpp"
 
+#include <cstring>
+
 namespace {
+
+template<typename T>
+int compare(T& el1, T& el2) {
+    return el1 - el2;
+}
+
+template<>
+int compare(char*& el1, char*& el2) {
+    return std::strcmp(el1, el2);
+}
+
+template<>
+int compare(const char*& el1, const char*& el2) {
+    return std::strcmp(el1, el2);
+}
 
 template<typename T>
 void quickSort(vector::Vector<T>& arr, int left, int right) {
     if (left >= right)
         return;
 
-    int pivot = arr[left + (right - left) / 2];
+    T pivot = arr[left + (right - left) / 2];
     int i = left, j = right;
 
     while (i <= j) {
-        while (arr[i] < pivot)
+        while (compare(arr[i], pivot) < 0)
             i++;
-        while (arr[j] > pivot)
+        while (compare(arr[j], pivot) > 0)
             j--;
 
         if (i <= j) {
@@ -37,9 +54,9 @@ int binarySearch(vector::Vector<T>& arr, T& target) {
     while (left <= right) {
         int mid = left + (right - left) / 2;
 
-        if (arr[mid] == target) {
+        if (compare(arr[mid], target) == 0) {
             return mid;
-        } else if (arr[mid] < target) {
+        } else if (compare(arr[mid], target) < 0) {
             left = mid + 1;
         } else {
             right = mid - 1;

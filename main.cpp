@@ -24,5 +24,22 @@ int main() {
     s2 = s3;
     std::cout << s1 << " == " << s2 << " => " << (s1 == s2) << std::endl;
 
+    
+    set::Set<const char*> s4;
+    s4.push("a1");
+    s4.push("d4");
+    s4.push("e5");
+    s4.push("f6");
+
+    set::Set<const char*> s5;
+    s5.push("a1");
+    s5.push("b2");
+    s5.push("c3");
+    s5.push("d4");
+
+    std::cout << s4 << " + " << s5 << " => " << s4 + s5 << std::endl;
+    std::cout << s4 << " * " << s5 << " => " << s4 * s5 << std::endl;
+    std::cout << s4 << " - " << s5 << " => " << s4 - s5 << std::endl;
+
     return 0;
 }
