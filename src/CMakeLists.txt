@@ -1,16 +1,18 @@
 cmake_minimum_required(VERSION 3.23)
 
-set(project "set")
+set(project "polynomial")
 project(${project})
 
 set(CMAKE_CXX_STANDARD 17)
 
 set(${project}_SOURCES
+    polynomial.cpp
+    term.cpp
 )
 
 set(${project}_HEADERS
-    vector.hpp
-    set.hpp
+    polynomial.h
+    term.h
 )
 
 set(${project}_SOURCE_LIST
@@ -22,5 +24,3 @@ add_library(${project}
     STATIC
     ${${project}_SOURCE_LIST}
 )
-
-set_target_properties(${project} PROPERTIES LINKER_LANGUAGE CXX)

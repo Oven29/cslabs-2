@@ -17,6 +17,7 @@ class Vector {
     size_t capacity;
 
     void resize();
+    void quickSort(int left, int right);
 
  public:
     Vector();
@@ -26,10 +27,15 @@ class Vector {
     [[nodiscard]] size_t getSize();
     void push(T value);
     T remove(size_t index);
-    bool delete_element(T el);
+    bool deleteElement(T el);
     [[nodiscard]] T& get(size_t index);
     [[nodiscard]] int find(T value);
+    void sort();
+    void print();
     void clean();
+
+    T* begin();
+    T* end();
 
     Vector& operator=(Vector& other);
     T& operator[](size_t index);
@@ -51,6 +57,33 @@ void Vector<T>::resize() {
 
     delete[] data;
     data = newData;
+}
+
+template<typename T>
+void Vector<T>::quickSort(int left, int right) {
+    if (left >= right)
+        return;
+
+    T pivot = this->get(left + (right - left) / 2);
+    int i = left, j = right;
+
+    while (i <= j) {
+        while (this->get(i) < pivot)
+            i++;
+        while (this->get(j) > pivot)
+            j--;
+
+        if (i <= j) {
+            std::swap((*this)[i], (*this)[j]);
+            i++;
+            j--;
+        }
+    }
+
+    if (left < j)
+        quickSort(left, j);
+    if (i < right)
+        quickSort(i, right);
 }
 
 template<typename T>
@@ -124,7 +157,7 @@ T Vector<T>::remove(size_t index) {
 }
 
 template<typename T>
-bool Vector<T>::delete_element(T el) {
+bool Vector<T>::deleteElement(T el) {
     int index = find(el);
 
     if (index == -1) {
@@ -144,6 +177,16 @@ int Vector<T>::find(T value) {
     }
 
     return -1;
+}
+
+template<typename T>
+void Vector<T>::sort() {
+    this->quickSort(0, this->size - 1);
+}
+
+template<typename T>
+void Vector<T>::print() {
+    std::cout << *this << std::endl;
 }
 
 template<typename T>
@@ -171,6 +214,16 @@ Vector<T>& Vector<T>::operator=(Vector<T>& other) {
     }
 
     return *this;
+}
+
+template<typename T>
+T* Vector<T>::begin() {
+    return data;
+}
+
+template<typename T>
+T* Vector<T>::end() {
+    return data + size;
 }
 
 template<typename T>

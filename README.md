@@ -6,4 +6,4 @@
 
 
 ### Лабораторная работа 5
-**[Наследование. Множества](https://iu5edu.ru/wiki/cpp2/docs/labs/lab5/)**
+**[Полиномы](https://iu5edu.ru/wiki/cpp2/docs/labs/lab6/)**
