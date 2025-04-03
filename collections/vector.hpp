@@ -32,6 +32,7 @@ class Vector {
     [[nodiscard]] int find(T value);
     void sort();
     void print();
+    void reverse();
     void clean();
 
     T* begin();
@@ -187,6 +188,13 @@ void Vector<T>::sort() {
 template<typename T>
 void Vector<T>::print() {
     std::cout << *this << std::endl;
+}
+
+template<typename T>
+void Vector<T>::reverse() {
+    for (size_t i = 0; i < size / 2; i++) {
+        std::swap(data[i], data[size - i - 1]);
+    }
 }
 
 template<typename T>

@@ -4,6 +4,8 @@
 
 namespace term {
 
+bool isTermSymbol(const char c);
+
 class Term {
  private:
     int k, n;
@@ -25,9 +27,9 @@ class Term {
     void operator+=(const Term& other);
     void operator*=(const Term& other);
 
-    bool operator==(const Term& other);
-    bool operator>(const Term& other);
-    bool operator<(const Term& other);
+   bool operator==(const Term& other) const;
+    bool operator>(const Term& other) const;
+    bool operator<(const Term& other) const;
 
     friend std::ostream& operator<<(std::ostream& os, const Term& term);
     friend std::istream& operator>>(std::istream& is, Term& term);

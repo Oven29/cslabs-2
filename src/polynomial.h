@@ -6,11 +6,16 @@
 
 namespace polynomial {
 
+enum class PolynomialOrder {
+   ascending,
+   decreasing,
+};
+
 class Polynomial {
  private:
     vector::Vector<term::Term>* terms;
     int degree;
-    bool ascendingOrder;
+    PolynomialOrder order;
 
  public:
     Polynomial();
@@ -23,6 +28,7 @@ class Polynomial {
     term::Term* end();
 
     int getDegree();
+    void setOrder(PolynomialOrder order);
 
     Polynomial& operator=(const Polynomial& other);
 
@@ -37,7 +43,7 @@ class Polynomial {
     void operator*=(const term::Term& other);
 
     friend std::ostream& operator<<(std::ostream& os, const Polynomial& poly);
-    // friend std::istream& operator>>(std::istream& is, Polynomial& poly);
+    friend std::istream& operator>>(std::istream& is, Polynomial& poly);
 };
 
 }  // namespace polynomial

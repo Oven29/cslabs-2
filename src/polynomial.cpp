@@ -1,8 +1,16 @@
 #include "polynomial.h"
 
+#include <cstring>
+
+namespace {
+
+const int BUF_SIZE = 1024;
+
+}
+
 namespace polynomial {
 
-Polynomial::Polynomial() : terms(new vector::Vector<term::Term>()), degree(0), ascendingOrder(true) {
+Polynomial::Polynomial() : terms(new vector::Vector<term::Term>()), degree(0), order(PolynomialOrder::decreasing) {
 }
 
 Polynomial::Polynomial(int t) : Polynomial(term::Term(t)) {
@@ -13,7 +21,7 @@ Polynomial::Polynomial(term::Term t) : Polynomial() {
     this->degree = t.getN();
 }
 
-Polynomial::Polynomial(const Polynomial& other) : degree(other.degree), ascendingOrder(other.ascendingOrder) {
+Polynomial::Polynomial(const Polynomial& other) : degree(other.degree), order(other.order) {
     this->terms = new vector::Vector<term::Term>(*other.terms);
 }
 
@@ -33,12 +41,16 @@ int Polynomial::getDegree() {
     return this->degree;
 }
 
+void Polynomial::setOrder(PolynomialOrder order) {
+    this->order = order;
+}
+
 Polynomial& Polynomial::operator=(const Polynomial& other) {
     if (this != &other) {
         delete this->terms;
         this->terms = new vector::Vector<term::Term>(*other.terms);
         this->degree = other.degree;
-        this->ascendingOrder = other.ascendingOrder;
+        this->order = other.order;
     }
     return *this;
 }
@@ -77,6 +89,11 @@ void Polynomial::operator*=(Polynomial& other) {
 }
 
 Polynomial& Polynomial::operator+(const term::Term& other) {
+    term::Term zeroTerm;
+    if (other == zeroTerm) {
+        return *this;
+    }
+
     for (term::Term& t : *this) {
         if (t.getN() == other.getN()) {
             t += other;
@@ -85,7 +102,6 @@ Polynomial& Polynomial::operator+(const term::Term& other) {
     }
 
     this->terms->push(other);
-    this->terms->sort();
     this->degree = std::max(this->degree, other.getN());
     return *this;
 }
@@ -111,17 +127,41 @@ std::ostream& operator<<(std::ostream& os, const Polynomial& poly) {
         return os << 0;
     }
 
+    poly.terms->sort();
+    if (poly.order == PolynomialOrder::decreasing) {
+        poly.terms->reverse();
+    }
+
     for (int i = 0; i < poly.terms->getSize(); i++) {
-        if (poly.terms->get(i).getK() > 0 && i != 0) {
-            os << "+ ";
+        if (i != 0) {
+            os << (poly.terms->get(i).getK() > 0 ? '+' : '-') << ' ';
         }
-        os << poly.terms->get(i);
+        os << poly.terms->get(i) * term::Term(poly.terms->get(i).getK() < 0 && i != 0 ? -1 : 1);
         if (i != poly.terms->getSize() - 1) {
             os << ' ';
         }
     }
 
     return os;
+}
+
+std::istream& operator>>(std::istream& is, Polynomial& poly) {
+    char* buffer = new char[BUF_SIZE];
+    is.getline(buffer, BUF_SIZE);
+
+    while (std::strlen(buffer) && term::isTermSymbol(*buffer)) {
+        poly += term::Term::parseTerm(buffer);
+        while (*buffer == ' ')
+            ++buffer;
+        if (*buffer == '+')
+            ++buffer;
+    }
+
+    if (std::strlen(buffer) && !term::isTermSymbol(*buffer)) {
+        throw std::runtime_error("Invalid polynomial input!");
+    }
+
+    return is;
 }
 
 }  // namespace polynomial

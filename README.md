@@ -5,5 +5,5 @@
 **[Cайт](https://iu5edu.ru/wiki/cpp2/)**
 
 
-### Лабораторная работа 5
+### Лабораторная работа 6
 **[Полиномы](https://iu5edu.ru/wiki/cpp2/docs/labs/lab6/)**

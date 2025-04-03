@@ -29,6 +29,10 @@ int toInt(const char c) {
 
 namespace term {
 
+bool isTermSymbol(const char c) {
+    return isNumber(c) || c == SPACE || c == X || c == MINUS || c == DEGREE;
+}
+
 Term::Term() : k(0), n(0){};
 
 Term::Term(int k) : k(k), n(0){};
@@ -48,25 +52,26 @@ Term Term::parseTerm(char*& buf) {
     int k = 0, n = 0;
     bool negativeK = false, negativeN = false;
 
-    for (int i = 0; i < std::strlen(buf); i++) {
-        if (buf[i] == MINUS && state == parseState::k) {
+    while (strlen(buf)) {
+        if (*buf == MINUS && state == parseState::k) {
             negativeK = true;
-        } else if (buf[i] == MINUS && state == parseState::n) {
+        } else if (*buf == MINUS && state == parseState::n) {
             negativeN = true;
-        } else if (buf[i] == X && state == parseState::k) {
+        } else if (*buf == X && state == parseState::k) {
             state = parseState::d;
-        } else if (buf[i] == DEGREE && state == parseState::d) {
+        } else if (*buf == DEGREE && state == parseState::d) {
             state = parseState::n;
-        } else if (isNumber(buf[i]) && state == parseState::k) {
-            k = k * 10 + toInt(buf[i]);
-        } else if (isNumber(buf[i]) && state == parseState::n) {
-            n = n * 10 + toInt(buf[i]);
-        } else if (buf[i] != SPACE) {
+        } else if (isNumber(*buf) && state == parseState::k) {
+            k = k * 10 + toInt(*buf);
+        } else if (isNumber(*buf) && state == parseState::n) {
+            n = n * 10 + toInt(*buf);
+        } else if (*buf != SPACE) {
             break;
         }
+        ++buf;
     }
 
-    return Term((negativeK ? -1 : 1) * (k == 0 && n != 0) ? 1 : k, (negativeN ? -1 : 1) * (state == parseState::d ? 1 : n));
+    return Term((negativeK ? -1 : 1) * ((k == 0 && n != 0) ? 1 : k), (negativeN ? -1 : 1) * (state == parseState::d ? 1 : n));
 }
 
 Term operator+(const Term& el1, const Term& el2) {
@@ -89,18 +94,18 @@ void Term::operator*=(const Term& other) {
     *this = *this * other;
 }
 
-bool Term::operator==(const Term& other) {
+bool Term::operator==(const Term& other) const {
     return this->k == other.k && this->n == other.n;
 }
 
-bool Term::operator>(const Term& other) {
+bool Term::operator>(const Term& other) const {
     if (this->n == other.n) {
         return this->k > other.k;
     }
     return this->n > other.n;
 }
 
-bool Term::operator<(const Term& other) {
+bool Term::operator<(const Term& other) const {
     return !(*this > other) && !(*this == other);
 }
 
@@ -109,10 +114,14 @@ std::ostream& operator<<(std::ostream& os, const Term& term) {
         os << 0;
     } else if (term.n == 0) {
         os << term.k;
-    } else if (term.n == 1) {
-        os << term.k << X;
     } else {
-        os << term.k << X << DEGREE << term.n;
+        if (term.k != 1) {
+            os << term.k;
+        }
+        os << X;
+        if (term.n != 1) {
+            os << DEGREE << term.n;
+        }
     }
 
     return os;
