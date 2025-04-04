@@ -10,6 +10,7 @@ set(${project}_SOURCES
 
 set(${project}_HEADERS
     vector.hpp
+    string.hpp
 )
 
 set(${project}_SOURCE_LIST
