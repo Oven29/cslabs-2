@@ -1,7 +1,5 @@
 #pragma once
 
-#include "../src/polynomial.h"
-
 namespace app {
 
 enum class ProgramMode {

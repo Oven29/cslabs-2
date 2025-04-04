@@ -1,18 +1,14 @@
 cmake_minimum_required(VERSION 3.23)
 
-set(project "polynomial")
+set(project "staff")
 project(${project})
 
 set(CMAKE_CXX_STANDARD 17)
 
 set(${project}_SOURCES
-    polynomial.cpp
-    term.cpp
 )
 
 set(${project}_HEADERS
-    polynomial.h
-    term.h
 )
 
 set(${project}_SOURCE_LIST
