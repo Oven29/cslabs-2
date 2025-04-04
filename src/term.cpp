@@ -131,7 +131,6 @@ std::istream& operator>>(std::istream& is, Term& term) {
     char* buffer = new char[BUF_SIZE];
     is.getline(buffer, BUF_SIZE);
     term = Term::parseTerm(buffer);
-    delete[] buffer;
     return is;
 }
 

@@ -88,30 +88,33 @@ void Polynomial::operator*=(Polynomial& other) {
     *this = *this * other;
 }
 
-Polynomial& Polynomial::operator+(const term::Term& other) {
-    term::Term zeroTerm;
-    if (other == zeroTerm) {
-        return *this;
+Polynomial Polynomial::operator+(const term::Term& other) {
+    Polynomial result(*this);
+
+    if (other == term::Term()) {
+        return result;
     }
 
-    for (term::Term& t : *this) {
+    for (term::Term& t : result) {
         if (t.getN() == other.getN()) {
             t += other;
-            return *this;
+            return result;
         }
     }
 
-    this->terms->push(other);
-    this->degree = std::max(this->degree, other.getN());
-    return *this;
+    result.terms->push(other);
+    result.degree = std::max(result.degree, other.getN());
+    return result;
 }
 
-Polynomial& Polynomial::operator*(const term::Term& other) {
-    for (term::Term& t : *this) {
+Polynomial Polynomial::operator*(const term::Term& other) {
+    Polynomial result(*this);
+
+    for (term::Term& t : result) {
         t *= other;
     }
 
-    return *this;
+    return result;
 }
 
 void Polynomial::operator+=(const term::Term& other) {
@@ -133,12 +136,14 @@ std::ostream& operator<<(std::ostream& os, const Polynomial& poly) {
     }
 
     for (int i = 0; i < poly.terms->getSize(); i++) {
-        if (i != 0) {
-            os << (poly.terms->get(i).getK() > 0 ? '+' : '-') << ' ';
-        }
-        os << poly.terms->get(i) * term::Term(poly.terms->get(i).getK() < 0 && i != 0 ? -1 : 1);
-        if (i != poly.terms->getSize() - 1) {
-            os << ' ';
+        if (poly.terms->get(i).getK() != 0) {
+            if (i != 0) {
+                os << (poly.terms->get(i).getK() > 0 ? '+' : '-') << ' ';
+            }
+            os << poly.terms->get(i) * term::Term(poly.terms->get(i).getK() < 0 && i != 0 ? -1 : 1);
+            if (i != poly.terms->getSize() - 1) {
+                os << ' ';
+            }
         }
     }
 
