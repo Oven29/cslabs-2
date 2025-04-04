@@ -37,8 +37,8 @@ class Polynomial {
     void operator+=(Polynomial& other);
     void operator*=(Polynomial& other);
 
-    Polynomial& operator+(const term::Term& other);
-    Polynomial& operator*(const term::Term& other);
+    Polynomial operator+(const term::Term& other);
+    Polynomial operator*(const term::Term& other);
     void operator+=(const term::Term& other);
     void operator*=(const term::Term& other);
 

@@ -6,9 +6,12 @@ set(CMAKE_CXX_STANDARD 20)
 
 set(SOURCES
     main.cpp
+    app/app.cpp
 )
 
-set(HEADERS)
+set(HEADERS
+    app/app.h
+)
 
 add_subdirectory(collections)
 add_subdirectory(src)
