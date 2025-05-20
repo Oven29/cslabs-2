@@ -73,10 +73,15 @@ namespace set {
 template<typename T>
 class Set : public vector::Vector<T> {
  public:
+    Set(T value);
+    Set();
+
     void push(T value);
     void sort();
     [[nodiscard]] int find(T value);
     bool has_element(T el);
+
+    // Set& operator=(Set& other);
 
     template<typename U>
     friend Set<U> operator+(Set<U>& el1, Set<U>& el2);
@@ -91,6 +96,14 @@ class Set : public vector::Vector<T> {
     void operator-=(Set<T>& other);
     void operator*=(Set<T>& other);
 };
+
+template<typename T>
+Set<T>::Set(T value) : vector::Vector<T>(value) {
+}
+
+template<typename T>
+Set<T>::Set() : vector::Vector<T>() {
+}
 
 template<typename T>
 void Set<T>::push(T value) {

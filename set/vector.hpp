@@ -19,6 +19,7 @@ class Vector {
     void resize();
 
  public:
+    Vector(T value);
     Vector();
     Vector(const Vector& other);
     ~Vector();
@@ -31,7 +32,7 @@ class Vector {
     [[nodiscard]] int find(T value);
     void clean();
 
-    Vector& operator=(Vector& other);
+    Vector& operator=(const Vector& other);
     T& operator[](size_t index);
 
     template<typename U>
@@ -39,6 +40,11 @@ class Vector {
     template<typename U>
     friend std::istream& operator>>(std::istream& is, const Vector<U>& vector);
 };
+
+template<typename T>
+Vector<T>::Vector(T value) : size(1), capacity(DEFAULT_CAPACITY), data(new T[DEFAULT_CAPACITY]) {
+    data[0] = value;
+}
 
 template<typename T>
 void Vector<T>::resize() {
@@ -158,7 +164,7 @@ void Vector<T>::clean() {
 }
 
 template<typename T>
-Vector<T>& Vector<T>::operator=(Vector<T>& other) {
+Vector<T>& Vector<T>::operator=(const Vector<T>& other) {
     if (this != &other) {
         clean();
         size = other.size;
