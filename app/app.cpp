@@ -3,6 +3,8 @@
 #include <cstring>
 #include <iostream>
 
+#include "../src/staff.h"
+
 namespace {
 
     const char* INTERACTIVE_CMD_ARG = "-it";
@@ -21,6 +23,9 @@ ProgramMode getProgramMode(int argc, char** argv) {
 
 void runDemonstrativeMode() {
     std::cout << "Demonstrative mode" << std::endl;
+    staff::Staff a("Ivan", 25, 1000);
+    staff::Worker worker("Petr", 30, 2000, 5);
+    worker.show();
 }
 
 void runInteractiveMode() {

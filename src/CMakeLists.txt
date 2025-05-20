@@ -6,9 +6,11 @@ project(${project})
 set(CMAKE_CXX_STANDARD 17)
 
 set(${project}_SOURCES
+    staff.cpp
 )
 
 set(${project}_HEADERS
+    staff.h
 )
 
 set(${project}_SOURCE_LIST
