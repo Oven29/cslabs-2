@@ -4,9 +4,13 @@ namespace staff {
 
 class Staff {
  public:
+    Staff() = default;
+    Staff(const Staff& other);
     Staff(const char* name, int age, int salary);
     virtual ~Staff();
     virtual void show() const;
+
+    Staff& operator=(const Staff& other);
 
  protected:
     char* name;
@@ -14,7 +18,7 @@ class Staff {
     int salary;
 };
 
-class Worker : protected Staff {
+class Worker : public Staff {
  public:
     Worker(const char* name, int age, int salary, int experience);
     ~Worker() override;
@@ -24,7 +28,7 @@ class Worker : protected Staff {
     int experience;
 };
 
-class Engineer : protected Staff {
+class Engineer : public Staff {
  public:
     Engineer(const char* name, int age, int salary, const char* specialization);
     ~Engineer() override;
@@ -34,7 +38,7 @@ class Engineer : protected Staff {
     char* specialization;
 };
 
-class Admin : protected Staff {
+class Admin : public Staff {
  public:
     Admin(const char* name, int age, int salary, int countOfSubordinates);
     ~Admin() override;

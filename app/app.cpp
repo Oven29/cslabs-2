@@ -3,11 +3,9 @@
 #include <cstring>
 #include <iostream>
 
-#include "../src/staff.h"
-
 namespace {
 
-    const char* INTERACTIVE_CMD_ARG = "-it";
+const char* INTERACTIVE_CMD_ARG = "-it";
 
 }
 
@@ -23,9 +21,19 @@ ProgramMode getProgramMode(int argc, char** argv) {
 
 void runDemonstrativeMode() {
     std::cout << "Demonstrative mode" << std::endl;
-    staff::Staff a("Ivan", 25, 1000);
-    staff::Worker worker("Petr", 30, 2000, 5);
-    worker.show();
+    vector::Vector<staff::Staff*> arr;
+
+    arr.push(new staff::Staff("Ivan", 25, 1000));
+    arr.push(new staff::Worker("Petr", 30, 2000, 5));
+    arr.push(new staff::Engineer("Sergey", 35, 3000, "C++"));
+    arr.push(new staff::Admin("Olga", 40, 5000, 10));
+    print(arr);
+    std::cout << "Removing element with index 2" << std::endl;
+    remove(arr, 2);
+    print(arr);
+    std::cout << "Clearing" << std::endl;
+    clear(arr);
+    print(arr);
 }
 
 void runInteractiveMode() {
@@ -43,6 +51,26 @@ void run(int argc, char** argv) {
             runDemonstrativeMode();
             break;
     }
+}
+
+void print(vector::Vector<staff::Staff*>& arr) {
+    if (arr.getSize() == 0) {
+        std::cout << "Vector is empty" << std::endl;
+        return;
+    }
+    for (size_t i = 0; i < arr.getSize(); ++i) {
+        std::cout << i << " | ";
+        arr[i]->show();
+        std::cout << std::endl;
+    }
+}
+
+void remove(vector::Vector<staff::Staff*>& arr, int index) {
+    arr.remove(index);
+}
+
+void clear(vector::Vector<staff::Staff*>& arr) {
+    arr.clear();
 }
 
 }  // namespace app
