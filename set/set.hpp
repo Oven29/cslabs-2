@@ -81,8 +81,6 @@ class Set : public vector::Vector<T> {
     [[nodiscard]] int find(T value);
     bool has_element(T el);
 
-    // Set& operator=(Set& other);
-
     template<typename U>
     friend Set<U> operator+(Set<U>& el1, Set<U>& el2);
     template<typename U>

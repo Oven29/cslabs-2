@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cstddef>
+#include <cstring>
 #include <iostream>
 #include <stdexcept>
 
@@ -8,6 +9,7 @@ namespace vector {
 
 const size_t DEFAULT_CAPACITY = 8;
 const size_t GROWTH_FACTOR = 2;
+const size_t SHRINK_FACTOR = 4;
 
 template<typename T>
 class Vector {
@@ -17,6 +19,7 @@ class Vector {
     size_t capacity;
 
     void resize();
+    size_t getNewCapacity();
 
  public:
     Vector(T value);
@@ -42,17 +45,40 @@ class Vector {
 };
 
 template<typename T>
-Vector<T>::Vector(T value) : size(1), capacity(DEFAULT_CAPACITY), data(new T[DEFAULT_CAPACITY]) {
-    data[0] = value;
+Vector<T>::Vector(T value) : Vector() {
+    push(value);
+}
+
+template<typename T>
+size_t Vector<T>::getNewCapacity() {
+    if (size < capacity / SHRINK_FACTOR) {
+        return capacity / SHRINK_FACTOR;
+    } else {
+        return capacity * GROWTH_FACTOR;
+    }
 }
 
 template<typename T>
 void Vector<T>::resize() {
-    capacity *= GROWTH_FACTOR;
+    capacity = getNewCapacity();
     T* newData = new T[capacity];
 
     for (size_t i = 0; i < size; i++) {
         newData[i] = data[i];
+    }
+
+    delete[] data;
+    data = newData;
+}
+
+template<>
+void Vector<char*>::resize() {
+    capacity = getNewCapacity();
+    char** newData = new char*[capacity];
+
+    for (size_t i = 0; i < size; i++) {
+        newData[i] = new char[strlen(data[i]) + 1];
+        std::strcpy(newData[i], data[i]);
     }
 
     delete[] data;
@@ -64,13 +90,9 @@ Vector<T>::Vector() : size(0), capacity(DEFAULT_CAPACITY), data(new T[DEFAULT_CA
 }
 
 template<typename T>
-Vector<T>::Vector(const Vector& other) {
-    size = other.size;
-    capacity = other.capacity;
-    data = new T[capacity];
-
+Vector<T>::Vector(const Vector& other) : size(0), capacity(other.capacity), data(new T[other.capacity]) {
     for (size_t i = 0; i < size; i++) {
-        data[i] = other.data[i];
+        push(other.data[i]);
     }
 }
 
@@ -113,6 +135,22 @@ void Vector<T>::push(T value) {
     data[size++] = value;
 }
 
+template<>
+void Vector<char*>::push(char* value) {
+    if (data == nullptr) {
+        data = new char*[DEFAULT_CAPACITY];
+        capacity = DEFAULT_CAPACITY;
+        size = 0;
+    }
+
+    if (size == capacity) {
+        resize();
+    }
+
+    data[size] = new char[strlen(value) + 1];
+    std::strcpy(data[size++], value);
+}
+
 template<typename T>
 T Vector<T>::remove(size_t index) {
     if (index < 0 || index >= size) {
@@ -126,6 +164,32 @@ T Vector<T>::remove(size_t index) {
     }
 
     size--;
+    if (size < capacity / SHRINK_FACTOR) {
+        resize();
+    }
+
+    return removed;
+}
+
+template<>
+char* Vector<char*>::remove(size_t index) {
+    if (index < 0 || index >= size) {
+        throw std::runtime_error("Index out of range!");
+    }
+
+    char* removed = new char[strlen(data[index]) + 1];
+    std::strcpy(removed, data[index]);
+    delete[] data[index];
+
+    for (size_t i = index; i < size - 1; i++) {
+        std::strcpy(data[i], data[i + 1]);
+    }
+
+    size--;
+    if (size < capacity / SHRINK_FACTOR) {
+        resize();
+    }
+
     return removed;
 }
 

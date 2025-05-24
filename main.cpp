@@ -3,8 +3,9 @@
 #include "set/vector.hpp"
 
 int main() {
-    char* myS = new[];
-    {"HelloHello"};
+    const char* source = "HelloHello";
+    char* myS = new char[strlen(source) + 1];
+    strcpy(myS, source);
 
     vector::Vector<char*> v((char*)"Hello!");
     v.push((char*)"Привет!");
@@ -25,7 +26,7 @@ int main() {
     std::cout << "Вектор v1: " << v1 << std::endl;
     set::Set<char*> s, s1, s2;
     s.push(myS);
-    delete [] myS;
+    delete[] myS;
     s.push((char*)"Привет!");
     s.push((char*)"Привет!");
     s.push((char*)"No");
