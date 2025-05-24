@@ -30,6 +30,7 @@ Staff& Staff::operator=(const Staff& other) {
     return *this;
 }
 
+
 void Staff::show() const {
     std::cout << "Name: " << name << " Age: " << age << " Salary: " << salary;
 }
