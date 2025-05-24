@@ -1,13 +1,34 @@
 #pragma once
 
 #include <cstddef>
+#include <cstring>
 #include <iostream>
 #include <stdexcept>
+
+namespace {
+
+template<typename T>
+int compare(T& el1, T& el2) {
+    return el1 - el2;
+}
+
+template<>
+int compare(char*& el1, char*& el2) {
+    return std::strcmp(el1, el2);
+}
+
+template<>
+int compare(const char*& el1, const char*& el2) {
+    return std::strcmp(el1, el2);
+}
+
+}  // namespace
 
 namespace vector {
 
 const size_t DEFAULT_CAPACITY = 8;
 const size_t GROWTH_FACTOR = 2;
+const size_t SHRINK_FACTOR = 4;
 
 template<typename T>
 class Vector {
@@ -16,6 +37,7 @@ class Vector {
     size_t size;
     size_t capacity;
 
+    size_t getNewCapacity();
     void resize();
     void quickSort(int left, int right);
 
@@ -26,14 +48,13 @@ class Vector {
 
     [[nodiscard]] size_t getSize();
     void push(T value);
-    T remove(size_t index);
+    void remove(size_t index);
     bool deleteElement(T el);
     [[nodiscard]] T& get(size_t index);
     [[nodiscard]] int find(T value);
     void sort();
-    void print();
     void reverse();
-    void clean();
+    void clear();
 
     T* begin();
     T* end();
@@ -48,8 +69,17 @@ class Vector {
 };
 
 template<typename T>
+size_t Vector<T>::getNewCapacity() {
+    if (size < capacity / SHRINK_FACTOR) {
+        return capacity / SHRINK_FACTOR;
+    } else {
+        return capacity * GROWTH_FACTOR;
+    }
+}
+
+template<typename T>
 void Vector<T>::resize() {
-    capacity *= GROWTH_FACTOR;
+    capacity = getNewCapacity();
     T* newData = new T[capacity];
 
     for (size_t i = 0; i < size; i++) {
@@ -69,9 +99,9 @@ void Vector<T>::quickSort(int left, int right) {
     int i = left, j = right;
 
     while (i <= j) {
-        while (this->get(i) < pivot)
+        while (compare(this->get(i), pivot) < 0)
             i++;
-        while (this->get(j) > pivot)
+        while (compare(this->get(j), pivot) > 0)
             j--;
 
         if (i <= j) {
@@ -104,7 +134,7 @@ Vector<T>::Vector(const Vector& other) {
 
 template<typename T>
 Vector<T>::~Vector() {
-    clean();
+    clear();
 }
 
 template<typename T>
@@ -142,19 +172,18 @@ void Vector<T>::push(T value) {
 }
 
 template<typename T>
-T Vector<T>::remove(size_t index) {
+void Vector<T>::remove(size_t index) {
     if (index < 0 || index >= size) {
         throw std::runtime_error("Index out of range!");
     }
 
-    T removed = data[index];
+    delete data[index];
 
     for (size_t i = index; i < size - 1; i++) {
         data[i] = data[i + 1];
     }
 
     size--;
-    return removed;
 }
 
 template<typename T>
@@ -186,11 +215,6 @@ void Vector<T>::sort() {
 }
 
 template<typename T>
-void Vector<T>::print() {
-    std::cout << *this << std::endl;
-}
-
-template<typename T>
 void Vector<T>::reverse() {
     for (size_t i = 0; i < size / 2; i++) {
         std::swap(data[i], data[size - i - 1]);
@@ -198,8 +222,11 @@ void Vector<T>::reverse() {
 }
 
 template<typename T>
-void Vector<T>::clean() {
+void Vector<T>::clear() {
     if (data != nullptr) {
+        for (size_t i = 0; i < size; i++) {
+            delete data[i];
+        }
         delete[] data;
     }
 
@@ -211,7 +238,7 @@ void Vector<T>::clean() {
 template<typename T>
 Vector<T>& Vector<T>::operator=(Vector<T>& other) {
     if (this != &other) {
-        clean();
+        clear();
         size = other.size;
         capacity = other.capacity;
         data = new T[capacity];
