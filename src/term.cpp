@@ -33,11 +33,11 @@ bool isTermSymbol(const char c) {
     return isNumber(c) || c == SPACE || c == X || c == MINUS || c == DEGREE;
 }
 
-Term::Term() : k(0), n(0){};
+Term::Term() : k(0), n(0) {};
 
-Term::Term(int k) : k(k), n(0){};
+Term::Term(int k) : k(k), n(0) {};
 
-Term::Term(int k, int n) : k(k), n(n){};
+Term::Term(int k, int n) : k(k), n(n) {};
 
 int Term::getK() const {
     return this->k;
@@ -50,7 +50,7 @@ int Term::getN() const {
 Term Term::parseTerm(char*& buf) {
     parseState state = parseState::k;
     int k = 0, n = 0;
-    bool negativeK = false, negativeN = false, degreeEntered = false;
+    bool negativeK = false, negativeN = false, kEntered = false;
 
     while (strlen(buf)) {
         if (*buf == MINUS && state == parseState::k) {
@@ -63,20 +63,20 @@ Term Term::parseTerm(char*& buf) {
             state = parseState::n;
         } else if (isNumber(*buf) && state == parseState::k) {
             k = k * 10 + toInt(*buf);
+            kEntered = true;
         } else if (isNumber(*buf) && state == parseState::n) {
             n = n * 10 + toInt(*buf);
-            degreeEntered = true;
         } else if (*buf != SPACE) {
             break;
         }
         ++buf;
     }
 
-    if (state == parseState::d && k == 0 && n == 0) {
-        return Term(1, 1);
+    if (state == parseState::d && k == 0 && n == 0 && !kEntered) {
+        return Term(negativeK ? -1 : 1, 1);
     }
 
-    return Term((negativeK ? -1 : 1) * ((k == 0 && n != 0 && !degreeEntered) ? 1 : k), (negativeN ? -1 : 1) * (state == parseState::d ? 1 : n));
+    return Term((negativeK ? -1 : 1) * ((k == 0 && n != 0 && !kEntered) ? 1 : k), (negativeN ? -1 : 1) * (state == parseState::d ? 1 : n));
 }
 
 Term operator+(const Term& el1, const Term& el2) {
