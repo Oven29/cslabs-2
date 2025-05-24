@@ -6,7 +6,7 @@
 
 namespace {
 
-const char* INTERACTIVE_CMD_ARG = "-it";
+const char* DEMONSTRATIVE_CMD_ARG = "--demo";
 
 void show(polynomial::Polynomial& p1, polynomial::Polynomial& p2, term::Term& x1, term::Term& x2) {
     std::cout << "x1 * x2 = " << x1 * x2 << std::endl;
@@ -21,11 +21,11 @@ void show(polynomial::Polynomial& p1, polynomial::Polynomial& p2, term::Term& x1
 namespace app {
 
 ProgramMode getProgramMode(int argc, char** argv) {
-    if (argc == 2 && std::strcmp(argv[1], INTERACTIVE_CMD_ARG) == 0) {
-        return ProgramMode::interactive;
+    if (argc == 2 && std::strcmp(argv[1], DEMONSTRATIVE_CMD_ARG) == 0) {
+        return ProgramMode::demonstrative;
     }
 
-    return ProgramMode::demonstrative;
+    return ProgramMode::interactive;
 }
 
 void runDemonstrativeMode() {
@@ -55,11 +55,10 @@ void runInteractiveMode() {
     polynomial::Polynomial p1, p2;
     std::cout << "p1= ";
     std::cin >> p1;
-    // std::cout << "p2= ";
-    // std::cin >> p2;
+    std::cout << "p2= ";
+    std::cin >> p2;
     // -0+0-0x^0 + 1 x ^1
     // -1x + 0x^6 - 1x^6 +x^6 +x
-    // -1x + 0x^6 - x^6 +x^6 + x 
 
     // term::Term x1, x2;
     // std::cout << "x1= ";
@@ -68,7 +67,7 @@ void runInteractiveMode() {
     // std::cin >> x2;
 
     std::cout << p1 << std::endl;
-    // std::cout << p2 << std::endl;
+    std::cout << p2 << std::endl;
 
     // show(p1, p2, x1, x2);
 }
