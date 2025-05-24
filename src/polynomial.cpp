@@ -135,16 +135,23 @@ std::ostream& operator<<(std::ostream& os, const Polynomial& poly) {
         poly.terms->reverse();
     }
 
+    bool isFirst = true;
+
     for (int i = 0; i < poly.terms->getSize(); i++) {
         if (poly.terms->get(i).getK() != 0) {
-            if (i != 0) {
+            if (!isFirst) {
                 os << (poly.terms->get(i).getK() > 0 ? '+' : '-') << ' ';
             }
             os << poly.terms->get(i) * term::Term(poly.terms->get(i).getK() < 0 && i != 0 ? -1 : 1);
             if (i != poly.terms->getSize() - 1) {
                 os << ' ';
             }
+            isFirst = false;
         }
+    }
+
+    if (isFirst) {
+        os << '0';
     }
 
     return os;

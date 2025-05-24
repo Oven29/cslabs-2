@@ -55,16 +55,22 @@ void runInteractiveMode() {
     polynomial::Polynomial p1, p2;
     std::cout << "p1= ";
     std::cin >> p1;
-    std::cout << "p2= ";
-    std::cin >> p2;
+    // std::cout << "p2= ";
+    // std::cin >> p2;
+    // -0+0-0x^0 + 1 x ^1
+    // -1x + 0x^6 - 1x^6 +x^6 +x
+    // -1x + 0x^6 - x^6 +x^6 + x 
 
-    term::Term x1, x2;
-    std::cout << "x1= ";
-    std::cin >> x1;
-    std::cout << "x2= ";
-    std::cin >> x2;
+    // term::Term x1, x2;
+    // std::cout << "x1= ";
+    // std::cin >> x1;
+    // std::cout << "x2= ";
+    // std::cin >> x2;
 
-    show(p1, p2, x1, x2);
+    std::cout << p1 << std::endl;
+    // std::cout << p2 << std::endl;
+
+    // show(p1, p2, x1, x2);
 }
 
 void run(int argc, char** argv) {
