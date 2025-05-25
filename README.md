@@ -5,5 +5,5 @@
 **[Cайт](https://iu5edu.ru/wiki/cpp2/)**
 
 
-### Лабораторная работа 7
-**[Виртуальные функции и классы](https://iu5edu.ru/wiki/cpp2/docs/labs/lab7/)**
+### Лабораторная работа 8
+**[Стандартная библиотека шаблонов](https://iu5edu.ru/wiki/cpp2/docs/labs/lab8/)**

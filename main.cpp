@@ -1,10 +1,10 @@
-#include "app/app.h"
+#include "src/app.h"
 
 #include <iostream>
 
-int main(int argc, char** argv) {
+int main() {
     try {
-        app::run(argc, argv);
+        app::run();
     } catch (std::exception& e) {
         std::cout << e.what() << std::endl;
     }
