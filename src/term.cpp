@@ -50,12 +50,12 @@ int Term::getN() const {
 Term Term::parseTerm(char*& buf) {
     parseState state = parseState::k;
     int k = 0, n = 0;
-    bool negativeK = false, negativeN = false, kEntered = false;
+    bool negativeK = false, negativeN = false, kEntered = false, nEntered = false;
 
     while (strlen(buf)) {
-        if (*buf == MINUS && state == parseState::k) {
+        if (*buf == MINUS && state == parseState::k && !kEntered) {
             negativeK = true;
-        } else if (*buf == MINUS && state == parseState::n && n == 0) {
+        } else if (*buf == MINUS && state == parseState::n && !nEntered) {
             negativeN = true;
         } else if (*buf == X && state == parseState::k) {
             state = parseState::d;
@@ -66,17 +66,18 @@ Term Term::parseTerm(char*& buf) {
             kEntered = true;
         } else if (isNumber(*buf) && state == parseState::n) {
             n = n * 10 + toInt(*buf);
+            nEntered = true;
         } else if (*buf != SPACE) {
             break;
         }
         ++buf;
     }
 
-    if (state == parseState::d && k == 0 && n == 0 && !kEntered) {
+    if (state == parseState::d && k == 0 && !kEntered) {
         return Term(negativeK ? -1 : 1, 1);
     }
 
-    return Term((negativeK ? -1 : 1) * ((k == 0 && n != 0 && !kEntered) ? 1 : k), (negativeN ? -1 : 1) * (state == parseState::d ? 1 : n));
+    return Term((negativeK ? -1 : 1) * ((nEntered && !kEntered) ? 1 : k), (negativeN ? -1 : 1) * (state == parseState::d ? 1 : n));
 }
 
 Term operator+(const Term& el1, const Term& el2) {

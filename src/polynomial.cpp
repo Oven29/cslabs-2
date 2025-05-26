@@ -138,11 +138,12 @@ std::ostream& operator<<(std::ostream& os, const Polynomial& poly) {
     bool isFirst = true;
 
     for (int i = 0; i < poly.terms->getSize(); i++) {
-        if (poly.terms->get(i).getK() != 0) {
+        int k = poly.terms->get(i).getK();
+        if (k != 0) {
             if (!isFirst) {
-                os << (poly.terms->get(i).getK() > 0 ? '+' : '-') << ' ';
+                os << (k > 0 ? '+' : '-') << ' ';
             }
-            os << poly.terms->get(i) * term::Term(poly.terms->get(i).getK() < 0 && i != 0 ? -1 : 1);
+            os << poly.terms->get(i) * term::Term(k < 0 && !isFirst ? -1 : 1);
             if (i != poly.terms->getSize() - 1) {
                 os << ' ';
             }

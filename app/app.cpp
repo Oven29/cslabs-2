@@ -47,7 +47,7 @@ void runDemonstrativeMode() {
     std::cout << "p3 = " << p3 << std::endl;
     polynomial::Polynomial p4;
     p4 = p3;
-    p4.setOrder(polynomial::PolynomialOrder::ascending);;
+    p4.setOrder(polynomial::PolynomialOrder::ascending);
     std::cout << "p4 = " << p4 << std::endl;
 }
 
@@ -60,6 +60,8 @@ void runInteractiveMode() {
     // -0+0-0x^0 + 1 x ^1
     // -1x + 0x^6 - 1x^6 +x^6 +x
 
+    // 0x+x^0-5x^0-0+0-x
+    // 0 - 0 + 0x - 0x^0 - 1
     // term::Term x1, x2;
     // std::cout << "x1= ";
     // std::cin >> x1;
