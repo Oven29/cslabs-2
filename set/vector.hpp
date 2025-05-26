@@ -101,6 +101,17 @@ Vector<T>::~Vector() {
     clean();
 }
 
+template<>
+Vector<char*>::~Vector() {
+    if (data != nullptr) {
+        delete[] data;
+    }
+
+    size = 0;
+    capacity = 0;
+    data = nullptr;
+}
+
 template<typename T>
 size_t Vector<T>::getSize() {
     return size;
